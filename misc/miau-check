@@ -1,0 +1,30 @@
+#! /bin/sh
+#
+# Put this line into your crontab (man crontab):
+# 0,10,20,30,40,50 * * * * /path/to/miau/miau-check >/dev/null 2>&1
+#
+# ...where /path/to/miau is likely either $HOME/miau or /usr/bin.
+#
+# This will check for a running miau every 10 minutes.
+#
+
+# Try to use locally installed miau if possible
+MIAUBIN="$HOME/miau/miau"
+test -f "$MIAUBIN" -a -x "$MIAUBIN" || MIAUBIN=miau
+
+# If miau can't be found automatically, you must define the location here
+# MIAUBIN=/somewhere/else/miau
+
+echo $MIAUBIN
+
+cd "$HOME/.miau/"
+if test -r pid; then
+	PID=`cat pid`
+	if `kill -USR1 $PID >/dev/null 2>&1`; then
+		exit 0
+	fi
+	rm -f pid
+fi
+echo "Starting miau..."
+"$MIAUBIN"
+exit 0

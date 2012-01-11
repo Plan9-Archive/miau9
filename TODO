@@ -1,0 +1,106 @@
+TODO:
+
+- write configuration file notes to miau.texi also
+
+- delayed onconnect, e.g. "send this five seconds after logging in"
+
+- quicklog should use ignores
+
+- #include miaurc (for general/global config)
+
+- forwardmsg = "never|detached|attached|always"
+
+- option to reduce qlog size when low on memory (it's not going to work out)
+
+- write enduserdebug as a macro (like in log_cannot_write)
+
+- try to reopen channel log file if not open already
+
+- review autoaway...
+
+- configure-option to disable forwardmsg
+
+- user-tracking for decent QUIT log
+
+- nicks-list should have nick-pairs for attached/detached -state
+	- awaynick
+
+- reintroduce channels in specific order (order defined in miaurc)
+	- alphabetical order
+	- channels in miaurc, then channels from client in given order
+
+- pack both ipv4- and ipv6-binaries in debian package
+
+- cycle empty channels
+
+- don't write ":No recipient given (PRIVMSG)" in qlog
+
+- miaurc should have an option for ctcp-replies (if CTCPREPLIES is defined)
+
+- repeat 352 only to client who requested it!
+	- keep queue of "WHO #channel" -messages and echo following incoming 
+	  352 / 315 only to this client
+
+- supress echoed post-JOIN messages that certain clients are not interested
+  about
+
+- option to use PRIVMSG instead of NOTICE when playing messagelog
+	- talk as "miau" like ENDUSERDEBUG?
+
+- option to make miau send PRIVMSG on connect if messagelog exists
+
+- randomize reconnect delay a little bit
+
+- autojoin channels only if not dropping from server too ofter
+
+- check other functions related to tables/ignore, there might be other
+  useless things as well...
+
+- ascii-art from a file
+
+- command to jump to certain server (irc.inet.fi etc.) ?
+
+- onattach in addition to onconnect ?
+
+- split source files into smaller
+
+- see what happens if user, who's channel operator, tries to touch ircop.
+  react to 484 only when connecting ?
+	- apparently not neccessary
+
+- fix anti-idle -thingie, now it works a bit illegal way...
+	- perhaps this isn't an issue
+
+- consider following: "IRC messages are always lines of characters
+  terminated with a CR-LF" (RFC 2812).
+
+- Use ISON instead of plain NICK (as done in _old_ miaus)
+
+- Reduce malloc()s and free()s by using static char[]s. As IRC limits length
+  of messages, this _can_ be done. Hmm, do all server comply to this? They
+  must, really.
+
+- rewrite the whole thing...
+
+
+NOTES TO SELF:
+
+- ignore.[ch] are almost completely inside #ifdef CTCP_REPLIES
+
+- process_ignores etc. is inside #ifdef CTCP_REPLIES
+
+
+
+muh-TODO:
+
+- consider the implications of the way we do logging.. is writing
+  everything as we get it such a good idea?
+
+- check the host allow stuff in relation to ipv6
+  leeh->> rip the stuff from ircd-hybrid for formatting of ipv4-in-ipv6?
+
+- message flood protection from dronenets
+
+- option to ignore server notices in the messagelog
+
+- vhost changing on the fly?

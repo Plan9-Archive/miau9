@@ -1,0 +1,15 @@
+Bugs:
+
+- Receive buffer is not cleared when connection is lost
+
+- QUIT is logged on every channel (ok fine it's a feature)
+
+- If server changes user's nick, miau doesn't try to get it back!?
+
+- Wildcard '*' matches one or more character, not any number as it's supposed
+  to.
+
+- dcc probably won't work with IPv6
+
+
+Removed unconfirmed bugs from this list.

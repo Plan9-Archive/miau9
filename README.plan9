@@ -1,0 +1,18 @@
+I build like so:
+
+% ape/psh
+# export CFLAGS="-D_C99_SNPRINTF_EXTENSION -D_BSD_EXTENSION -DHAVE_SOCK_OPTS -DHAVE_SNPRINTF -g"
+# ./configure --disable-mkpasswd
+[lots of junk]
+# make
+[this will compile some stuff and then bail out at the documentation step]
+# cp misc/miaurc $home/lib/
+[Now go and edit your miaurc to taste]
+# cp src/miau $home/bin/386/
+
+And then to run it:
+# miau -f -d $home/lib
+
+You can then connect to localhost:4096 by default, with whatever password you chose in the miaurc.
+
+Email john at jfloren dot net if you need help.

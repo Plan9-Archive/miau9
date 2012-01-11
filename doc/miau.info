@@ -1,0 +1,710 @@
+This is miau.info, produced by makeinfo version 4.13 from miau.texi.
+
+This is the miau manual.
+
+   Copyright (C) 2002-2005 Tommi Saviranta
+
+INFO-DIR-SECTION Texinfo documentation system
+START-INFO-DIR-ENTRY
+* miau: (miau).		The miau manual
+END-INFO-DIR-ENTRY
+
+
+File: miau.info,  Node: Top,  Next: Introduction,  Up: (dir)
+
+miau Manual
+***********
+
+This is edition 0.6.6 of the `miau Manual', last updated 22 August 2010.
+
+* Menu:
+
+* Introduction::	Why you need an irc-bouncer and how it is used
+* Installation::	How to install miau
+* Command Line Options::	Invocation of miau
+* miau Commands::	Commands while miau is running
+* miaurc Commands::	Statements in your miaurc
+
+
+File: miau.info,  Node: Introduction,  Next: Installation,  Prev: Top,  Up: Top
+
+1 What is an irc-bouncer?
+*************************
+
+A bouncer doesn't do anything else than diverting a network-connection.
+
+   In case of an irc-bouncer, connections from your irc-program
+(client) are diverted by the bouncer to a irc-server.
+
+   "What is this good for?", you might ask.
+
+   Well, let's assume you've got a dialup-connection.  If somebody
+performs a `/WHOIS' on you it shows something like "yournick is
+yournick!yourident@dialup66-r-v.isp.at".
+
+   If you are vain you don't want people to see this stupid hostname.
+So you get a account on a machine with a cool hostname (from now on
+refered as middleman), get miau running there and a /whois on you will
+show middleman's hostname, since the connection to the irc-server is
+actually originating from middleman.
+
+   Another advantage is that network-attacks aren't really destinating
+to YOUR computer but to middleman, which is in theory a machine that
+can't be brought down.
+
+2 What makes miau special over other bouncers?
+**********************************************
+
+miau is very straight and simple to set up and the probably most
+important and interesting feature is that miau keeps the middleman ->
+irc-server connection up even after you disconnect with your client.
+
+   This means miau prevents people from using your nick (this is
+especially handy on nets like IRCNet, since there are no services like
+on dalnet etc) and tells people who message you that you're not here
+and logs what these people said.
+
+   Upon your next connect to miau, it will let the channels you've been
+in in your last session pop up, which means that you'll keep your
+status in these channels.
+
+   Besides that miau's got a sophisticated flood-protection making it
+(almost) impossible to disconnect miau.
+
+3 Copyright
+***********
+
+miau has been written by Tommi Saviranta <wnd@iki.fi>.  miau branched
+from muh, see http://mind.riot.org/muh/.  miau is licensed under the
+GPL. See COPYING for details.
+
+
+File: miau.info,  Node: Command Line Options,  Next: miau Commands,  Prev: Installation,  Up: Top
+
+4 Command Line Options
+**********************
+
+`-f'
+     Stay in foreground (don't fork)
+
+`-d directory'
+     Specifies a different directory than the default for miaurc,
+     messages and log
+
+`-c'
+     You will be prompted for a word to crypt. The output can be used as
+     `password' in miaurc if you don't want to have the password stored
+     in clear text.  Note that you'll still have to authorize with the
+     unencrypted password.
+
+     This option might not be compiled in.
+
+
+File: miau.info,  Node: miau Commands,  Next: miaurc Commands,  Prev: Command Line Options,  Up: Top
+
+5 miau Commands
+***************
+
+miau accepts following commands to be issued by the client via `/MIAU
+<command>'.
+
+   Note that some IRC-clients might require a prefix such as `/QUOTE' or
+`/RAW' to send commands they don't know about.
+
+`HELP'
+     Display supported commands
+
+`READ'
+     Read received messages
+
+`DEL'
+     Delete all messages
+
+`PRINT'
+     Prints miau's server-list. Servers prefixed with '+' work, those
+     with '-' don't.
+
+`JUMP [servernumber]'
+     Jump to next server in serverlist. If `servernumber' (see `PRINT')
+     is specified, miau will jump to this server (even if marked as not
+     working).
+
+`REHASH'
+     Reread config-file. Note that this can also be performed by
+     sending a `SIGHUP' to miau (see `kill(1)'). If `realname' or
+     `username' have been changed miau will reconnect to it's current
+     server.
+
+`DIE [reason]'
+     Terminate miau. A quit reason can be given after command.
+
+`FLUSHQLOG [[[days:]hours:]minutes]'
+     Flush days/hours/minutes worth of quicklog.
+
+`QUICKLOG [[[days:]hours:]minutes]'
+     Replay days/hours/minutes worth of quicklog.
+
+     This command might not be compiled in.
+
+`UPTIME'
+     Prints uptime of miau.
+
+     This command might not be compiled in.
+
+`PINGSTAT'
+     Prints ping statistics.
+
+     This command might not be compiled in.
+
+`DUMP'
+     Prints some of miau's internal variables. Used for debugging.
+
+     This command might not be compiled in.
+
+
+File: miau.info,  Node: Installation,  Next: Command Line Options,  Prev: Introduction,  Up: Top
+
+6 Installation
+**************
+
+Create a `.miau/'-directory in your homedir and copy `miaurc' there (it
+will probably reside in `/usr/share/miau', depending on your
+os/distribution).
+
+   Edit `miaurc', _make sure noone except you has read-access_ and
+launch miau.
+
+   To make sure miau's running all day there is a script called
+`miau-check' that came with miau. Edit it as well and make `crontab(5)'
+call it periodically.
+
+
+File: miau.info,  Node: miaurc Commands,  Prev: miau Commands,  Up: Top
+
+7 miaurc Commands
+*****************
+
+There are numerous commands with which you can extensively customize
+miau's behaviour. The must be placed in the `miaurc' that miau reads on
+startup, it is usually `$HOME/.miau/miaurc'.
+
+8 Required settings
+*******************
+
+`nicknames = { "nick" }'
+     Your nickname (and secondary nicknames) on IRC. If the primary
+     nick (first nick on the list) is already on use, miau will try the
+     others on the list.
+
+`realname = "realname"'
+     Your "real" name (which will be shown by `/WHOIS'-command) on IRC.
+
+`username = "username"'
+     Your ident (matters only if you don't have `identd' running).
+
+`password = "password"'
+     The password miau will expect to receive from client when it's
+     registering with nick. If this is 13 characters long, miau assumed
+     it's crypted. miau can generate password-hashes with `-c' -switch,
+     if it is compiled with that feature.
+
+`listenport = "port"'
+     The port miau will wait for incoming connections. This is the port
+     you connect your IRC-client to.
+
+`servers = { "server":"port":"password":"timeout" }'
+     miau's IRC-server-list. Each line represents one server, where
+     timeout is delay in seconds before connectiong attempt times out.
+     Only `server' parameter is required.
+
+`connhosts = { "host":"permitted" }'
+     List of hosts that are allowed (or denied) to connect to miau. When
+     `permitted' is left unset, it is assumed to be `true'. This list
+     will be processed as a chain which means latter rules can override
+     previous ones.
+
+     Note: You can define "your" hostname with `@@'. Only the _last_
+     occurance of `@@' will be translated.
+
+
+9 Optional settings
+*******************
+
+`statelog = "state"'
+     Should miau write state log to `$MIAUDIR/log'? When true, log will
+     be written in this file. If set to false, the same stuff is
+     printed on `stdout' (on terminal).
+
+`listenhost = "host"'
+     Host miau uses to listen on.  If you are compiled with IPV6 and
+     need this to listen on an IPV4 port, you must use an IP in the
+     form `::FFFF:127.0.0.1'.
+
+`floodtimer = "number"'
+     Time it takes to send one message. When configuring
+     flood-protection, this variable defined how fast you can send
+     messages; how many seconds sending one message takes. See also
+     `burstsize'.
+
+`burstsize = "number"'
+     How many messages can be sent at once. When configuring
+     flood-protection, this variable defined how many messages can be
+     sent at once (in a burst). See also `floodtimer'.
+
+`jointries = "number"'
+     Number of tries to join channel after dropping from server etc.
+     miau tries to join channels once a minute.
+
+`bind = "host"'
+     Host/IP miau uses for outgoing connections.
+
+`maxclients = "number"'
+     Maximum number of clients connected to miau concurrently. Set to
+     zero for unlimited clients.
+
+`stonedtimeout = "seconds"'
+     Time (in seconds) with no data from the server before it is
+     declared stoned and being disconnected. Although minimum value is
+     30, this value has no upper limit. Watch out, though, if this
+     value is set too high, death of servers may stay undetected for a
+     very long time if you are idle.
+
+`connecttimeout = "seconds"'
+     Time (in seconds) before connection attampt will time out. Note
+     that while connecting to the server miau will not respond to
+     clients. Minimum value is 5, and many systems define maximum value.
+
+`channels = { "channel":"keyword" }'
+     List of channels to join.
+
+`rejoin = "state"'
+     Rejoin channels after disconnecting from the server.  If `rejoin'
+     is set to `true', channels defined in `channels'" are also joined
+     when client first time connects to miau.
+
+`leave = "state"'
+     Leave channels when all clients have detached from miau.  If
+     `leave' is set to `false' and `rejoin' is set to `true', channels
+     defined at `channels' will be joined at miau startup.  If both
+     `leave' and `rejoin' is set to `true', channels that are left at
+     client detach, are rejoined when client attached back to miau.
+
+`leavemsg = "message"'
+     Message miau will either use as PART-message or as ACTION when all
+     clients have detached from miau. If unset or set to empty, no
+     message will be shown. Note that many people dislike event-based
+     messages (which happens when `leave' is set to `false' and
+     `leavemsg' is set). Note that commenting this option out and
+     rehashing after `leavemsg' was set, this option is _not_ reverted.
+     To disable `leavemsg' afterwards you need to write an empty string
+     here and rehash. Also see `usequitmsg'.
+
+`awaymsg = "message"'
+     Text that will be set to miau's away-reason when all clients have
+     detached from miau. If unset or set to empty, AWAY-status will be
+     left untouched. When any client attaches back to miau, AWAY-status
+     will be reset. Note that is user sets him/herself away, miau will
+     _not_ touch away-status nor message neither when connecting to or
+     disconnected from miau. Also note that commenting this option out
+     and rehashing after `awaymsg' was set, this option is _not_
+     reverted. To disable `awaymsg' afterwards you need to write an
+     empty string here and rehash. Also see `usequitmsg'.
+
+`usequitmsg = "state"'
+     Use last quit-reason as away-reason and/or leave-message (if
+     respective options are enabled) when all clients have disconnected
+     from miau. If quit-reason was empty, default values of awaymsg and
+     leavemsg will be used, otherwise most recent quit-message
+     overrides values in miaurc.
+
+`autoaway = "mode"'
+     miau can set user away automatically. This option allows to define
+     when to do that:
+    `never'
+          	Never set user away automatically
+
+    `detach'
+          	Set user away when any of the clients disconnects
+
+    `noclients'
+          	Set user away when the last client disconnects
+     If `usequitmsg' is set, quit message will be used as a reason.  If
+     not, `awaymsg' will be used.
+
+`chandiscon = "mode"'
+     When miau is disconnected from the server e.g. because of network
+     problem, miau can notify user about this in a couple of ways.
+    `nothing'
+          	Only print server notice
+
+    `notice'
+          	Send notice to each channel
+
+    `part'
+          	Part each channel. mIRC users probably don't want to
+          use this.
+
+    `privmsg'
+          	Only send a private message to the user
+     Note that if your are experiencing network problems between miau
+     and the IRC server, it is possible that QUIT message is never
+     received yourself. This may lead to a situation where you see
+     multiple entries of you on the channel. To fix this, you can
+     either part/rejoin the channel, reconnect to miau, or set
+     `chandiscon' to `part'.
+
+`getnick = "selection"'
+     miau can try to reclaim your primary nick when it is lost. This
+     option may be one of the following:
+    `never'
+          	miau will not try to get your nick back
+
+    `detached'
+          	miau will try to get your nick when no clients are
+          attached
+
+    `attached'
+          	miau will try to get your nick when there are one or
+          more clients 	attached
+
+    `always'
+          	miau will try to get your nick
+     Note: do _not_ use options `attached' and `always' with clients
+     (like irc-II EPIC) that automatically change your nick when they
+     receive `ERR_NICKINUSE' from the server - you might end up chaning
+     your nick until server drops your connection due excess (nick)
+     flood.
+
+`getnickinterval = "seconds"'
+     Time between tries (in seconds) to obtain currently (possibly)
+     lost primary nick. Don't set it too low or you might get kicked
+     out the server due to excess flood.
+
+`antiidle = "minutes"'
+     Time between idle-timer resets in minutes. Set to 0 to disable.
+
+`qloglength = "minutes"'
+     Age of oldest entry in quicklog in minutes. Set to zero to disable
+     quicklog.
+
+     Note: private messages get also logged into quicklog, but if
+     `inbox' is enabled, they are moved to messagelog instead of simply
+     dropping of from quicklog.
+
+     This option might not be compiled in.
+
+`timestamp = "mode"'
+     Location of timestamp in quicklog.
+
+     Available modes:
+    `none'
+          	No timestamp
+
+    `beginning'
+          	Timestamp in beginning of line
+
+    `end'
+          	Timestamp at end of line
+
+     This options might not be compiled in.
+
+`flushqlog = "state"'
+     If set to `true', quicklog will be written only when no clients are
+     connected and quicklog will be erased when client connects to
+     miau. If you are running a single client, you probably want to
+     leave this to `false'.
+
+     This option might not be compiled in.
+
+`autoqlog = "minutes"'
+     Automatically replay number of minutes of quicklog on attach.
+     Setting autoqlog to 0 will disable automagic quicklog replay. If
+     autoqlog is set to -1, full quicklog (length defined with
+     `qloglength') will be replayed on attach.
+
+     This option might not be compiled in.
+
+`qlog_no_my_quit = "state"'
+     If set to `true', quit messages about "me" will be suppressed when
+     replaying quicklog. If you experience weird behaviour from your
+     IRC client when replaying quicklog (e.g. channel tabs are
+     disappearing), try enabling this option.
+
+     This option might not be compiled in.
+
+`inbox = "state"'
+     Enables logging private messages when no clients are connected to
+     miau.
+
+     Note: if quicklog is enabled (see `qloglength'), private messages
+     are first stored in quicklog and moved to messagelog when they
+     become too old to be stored in quicklog.
+
+     This option might not be compiled in.
+
+`nevergiveup = "state"'
+     If set to `true', miau will reset "working"-status of servers to
+     working when all are set to dysfunctional.  Respectively, if set to
+     `false', miau will quit when all servers on the list have been set
+     to dysfunctional.
+
+`norestricted = "state"'
+     If set to `true', miau will not stay on server that forces user to
+     have restricted-status (+r).
+
+`reconnectdelay = "seconds"'
+     Time (in seconds) between connection attempts.  Minumun value is
+     set to 1.
+
+`nickfillchar = "fill character"'
+     Character used to modify your primary nick when all defined nicks
+     are already occupied. Note character is a single octet (byte) and
+     if longer string is fed, only the first character is used.
+
+`maxnicklen = "length"'
+     Maximum nick length, used with `nickfillchar'.
+
+`usermode = "usermode(s)"'
+     Usermode that miau will request (if no clients are attached at the
+     moment) from the server when connection to the server is
+     established. Leave unset or set to empty to disable this feature.
+
+`forwardmsg = "command"'
+     miau can collect the (private) messages within specified time (see
+     `forwardtime') and pipe them into the program specified. Leave this
+     unset or set to empty to disable this feature.
+
+`forwardtime = "seconds"'
+     Time in seconds after first inserted line into forwardmsg queue
+     before piping the stuff out. Default is 180 seconds (or three
+     mintues).
+
+`ignore = { "mask":"ignored" }'
+     List of users whose private messages (PRIVMSG) and noticies
+     (NOTICE) are ignored when no clients are attached to miau. When
+     `ignored' is left undefined, it is assumed to be `true'. Setting
+     `ignored' to `false' means that this user will _not_ be ignored.
+     This list is processed as a chain.
+
+     Note: You can define "your" hostname with @@. Only the _last_
+     occurance of @@ will be translated.
+
+`privlog = "mode"'
+     Whatever private messages should be logged in nick-specific files.
+     Can be one of following:
+    `never'
+          	never write private message logs
+
+    `detached'
+          	write private message logs only when there are no
+          clients connected
+
+    `attached'
+          	write private logs only when there are clients connected
+
+    `always'
+          	always write private message logs
+
+     All logfiles are written into miau's log directory (`logs').
+
+     This option might not be compiled in.
+
+`chanlog = { "channel(s)":"options":"logfile" }'
+     List of channel logfiles.
+
+     When channel is set to `*', line represents global log. When
+     logging, if channel doesn't have entry of it's own in this list,
+     it will use settings of global log and write log to it's own file.
+     When defining global log, `logfile' is ignored. Each line can have
+     multiple channels (like `#foobar,#miau').
+
+     If logfile is left undefined, logfile will be named after the
+     channel with possible suffix (see `logsuffix'). All filenames are
+     relative and are, by default, written in miau's log directory
+     (`logs').
+
+     Options consist of abritary set of following possibilities:
+    `j'
+          	log joins
+
+    `e'
+          	log parts (exits)
+
+    `q'
+          	log quits
+
+    `m'
+          	log messages (privmsg/notice)
+
+    `c'
+          	log mode changes
+
+    `n'
+          	log nick changes
+
+    `o'
+          	log misc events (other)
+
+    `b'
+          	log messages from miau (bouncer)
+
+    `a'
+          	log all of above
+
+    `A'
+          	log when a client is attached
+
+    `D'
+          	log when a client is detached
+
+    `C'
+          	log continuously (status of clients doesn't matter)
+
+     Note that all channelless messages (such as QUIT) are logged on
+     every active channel. This is a feature, not a bug.
+
+     This option might not be compiled in.
+
+`logsuffix = "suffix"'
+     When writing log to undefined logfile, each logfile consists of
+     channel name followed by suffix. Suffix can be defined here.
+
+`onconnect = { "mode":"target/data"(:"data") }'
+     When miau connects and registers user to server, miau can send
+     pre-defined messages. User can define miau to send normal messages
+     (`PRIVMSG'), notices (`NOTICE') or arbitrary messages.
+
+     Mode can be one of the following:
+    `p'
+          	private message (`PRIVMSG').
+
+    `n'
+          	notice (`NOTICE'). Should be used with services and
+          automatons, 	but unfortunately some network services can't
+          cope with notices.
+
+    `r'
+          	"raw" message. This means user must provide complete
+          message to send to 	the server. Using raw message user has
+          complete control over what is 	being sent. If you
+          don't know what this is, you don't need this.  When 	using
+          modes "`p'" or "`n'", user must provide both 	message and
+          target where as with raw messages only one parameter in
+          addition to type should be given.
+
+     This option might not be compiled in.
+
+`automodes = { "mask":"privilegded" }'
+     List of people who are automatically given certain privilege on
+     channel. Mask is given in form of
+     `mode:nick!username@host/#channel' (where `mode' is a single
+     character) and list is processed as a chain.
+
+     Note: You can define "your" hostname with @@. Only the _last_
+     occurance of @@ will be translated.
+
+     This option might not be compiled in.
+
+`automodedelay = "seconds"'
+     Time (in seconds) after first queued mode change would take
+     effect. During this period of time miau can collect more than one
+     mode change and commit up to three at a time. Other situation
+     reasonaly big value (like 30) here could prove useful is channel
+     where there are stupid "auto-oping" bots. (Stupid bots do mode
+     changes even if someone else did that already.)
+
+     This option might not be compiled in.
+
+`noidentifycapab = "state"'
+     Miau can suppress all capability (CAPAB) requests for IDENTIFY-*
+     (including IDENTIFY-MSG and IDENTIFY-CTCP) from being sent to the
+     server. If you're using quicklog and capable server, you may want
+     to enable this to clean up the log replay.
+
+`cmdpasswd = "password"'
+     Password for remote commands. If this is 13 characters long, miau
+     assumes it's crypted. Comment this out or leave it empty to
+     disable remote commands. When sending miau a remote command,
+     password _always_ begins with column (':') (if `cmdpasswd' is set
+     to "foobar" (or hash of it), you need to send miau a message
+     beginning with `:foobar' to issue a remote command).  miau can
+     generate password-hashes with `-c' -switch, if it is compiled with
+     that feature.
+
+     This feature might not be compiled in.
+
+`dccbounce = "state"'
+     miau can bounce DCCs. Set to true to enable bouncing.  You
+     probably don't need this.
+
+     This option might not be compiled in.
+
+`dccbindhost = "host"'
+     If miau has separate IPs for IRC-network and clients, you should
+     enter IP for clients here.
+
+     This option might not be compiled in.
+
+`privmsg_format = "format"'
+     When set, given prefix is inserted into private messages echoed to
+     other attached users. This can be particulary useful when you
+     often have multiple clients attached, chat privately with people,
+     and want all attached clients to see the message flow. In other
+     words, if you and her are having a conversation, you1 will
+     probably see this properly in one query:
+
+     Query with her:
+          <her> hello
+          <you> hi!
+
+     At the same time, you2 will probably see this a little differently:
+
+     Query with her:
+          <her> hello
+
+     Query with you:
+          <you> hi!
+
+     When privmsg_format is set to "`<- <%s> '", you1 will see this
+     just like before, but you2 can see some improvement:
+
+     Query with her:
+          <her> hello
+          <her> <- <you> hi!
+
+     Note that if you use privmsg_format you MUST have "`%s'" somewhere
+     in the prefix.  This marker will be replaced with your nick.
+
+     Note that if private message is too long to fit in IRC-protocol
+     defined message length (510 characters including protocol), your
+     message to other clients will be truncated. This is NOT a bug so
+     don't report it.
+
+`newserv_disconn = "selection"'
+     miau can work around an issue with certain IRC networks such as
+     Afternet when using mIRC (and possible some other clients). If
+     your client doesn't show you rejoining channels after reconnecting
+     to server, try enabling this options.
+
+     This option may be one of the following:
+    `never'
+          Never disconnect client(s) after connecting to server.
+
+    `newserver'
+          Disconnect client(s) if server welcome message has changed.
+
+    `always'
+          Disconnect client(s) after connecting to server.
+
+
+
+
+Tag Table:
+Node: Top260
+Node: Introduction673
+Node: Command Line Options2709
+Node: miau Commands3297
+Node: Installation4839
+Node: miaurc Commands5362
+
+End Tag Table
