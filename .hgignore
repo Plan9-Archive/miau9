@@ -1,0 +1,7 @@
+syntax: glob
+Makefile
+config.log
+config.status
+doc/Makefile
+misc/Makefile
+src/Makefile
