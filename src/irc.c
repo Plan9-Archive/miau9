@@ -409,6 +409,8 @@ sock_listen(int sock)
  * to establish a connection with us. If connection is unauthorized, connection
  * will be closed and function returns -1.
  */
+typedef int socklen_t;
+
 int
 sock_accept(int sock, char **s, int checkperm)
 {
