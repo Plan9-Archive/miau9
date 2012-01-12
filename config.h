@@ -236,7 +236,7 @@
 #undef MKPASSWD
 
 /* disable on-connect actions */
-#undef ONCONNECT
+#define ONCONNECT
 
 /* Name of package */
 #undef PACKAGE
@@ -266,10 +266,10 @@
 #undef PRIVLOG
 
 /* disable quicklog timestamps */
-#undef QLOGSTAMP
+#define QLOGSTAMP
 
 /* disable quicklog */
-#undef QUICKLOG
+#define QUICKLOG
 
 /* enable release nick -feature */
 #undef RELEASENICK

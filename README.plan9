@@ -15,4 +15,6 @@ And then to run it:
 
 You can then connect to localhost:4096 by default, with whatever password you chose in the miaurc.
 
+If, like me, you want the quicklog functionality, you may want to hand-edit config.h to enable the appropriate defines. Passing options to configure doesn't seem to have much effect, so I have been setting CFLAGS or editing config.h as desired.
+
 Email john at jfloren dot net if you need help.
